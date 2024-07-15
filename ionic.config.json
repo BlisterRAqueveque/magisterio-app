@@ -1,0 +1,7 @@
+{
+  "name": "magisterio-app",
+  "integrations": {
+    "capacitor": {}
+  },
+  "type": "angular-standalone"
+}
