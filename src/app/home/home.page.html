@@ -1,6 +1,30 @@
-<ion-content [fullscreen]="true" [scrollEvents]="true" (ionScroll)="asd($event)">
-  <m-navbar [scroll]="isScroll" />
-  <div class="h-screen"></div>
-  <div class="h-screen"></div>
+<ion-content [fullscreen]="true" [scrollEvents]="true" (ionScroll)="onScroll($event)">
+  <m-navbar [scroll]="isScroll" [height]="height" />
+
+  <div class="relative px-4">
+    <!-- Next button -->
+    <div class="rounded-full shadow-lg p-2 border flex justify-center items-center
+      absolute left-2 top-1/2 -translate-y-1/2 z-10 bg-white" (click)="swiper.swiper.slideNext()">
+      <ng-icon name="heroChevronLeftSolid" class="lg:text-2xl md:text-base" />
+    </div>
+    <!-- Swiper container -->
+    <swiper-container #swiper id="swiper" [breakpoints]="breakpoints" slides-per-view="1" loop="true" speed="500"
+      autoplay="true" delay="1500">
+      <swiper-slide>
+        <m-card />
+      </swiper-slide>
+      <swiper-slide>
+        <m-card />
+      </swiper-slide>
+    </swiper-container>
+    <!-- Previous button -->
+    <div class="rounded-full shadow-lg p-2 border flex justify-center items-center
+      absolute right-2 top-1/2 -translate-y-1/2 z-10 bg-white" (click)="swiper.swiper.slidePrev()">
+      <ng-icon name="heroChevronRightSolid" class="lg:text-2xl md:text-base" />
+    </div>
+  </div>
+
+  <div class="h-screen">
+  </div>
   <div class="h-screen"></div>
 </ion-content>

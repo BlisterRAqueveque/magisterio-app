@@ -56,10 +56,11 @@
 }
 
 input[type="date"]::-webkit-calendar-picker-indicator {
-  background-color: #082f49;
+  background-color: #F7D0B6; /* Se invierte el color final para que quede el real #082f49 */
   border-radius: 50%;
   padding: 5px;
   cursor: pointer;
+  filter: invert(1);
 }
 
 /* Ripple button effects */

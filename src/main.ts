@@ -12,7 +12,9 @@ import {
 import { provideAnimations } from '@angular/platform-browser/animations';
 import { routes } from './app/app.routes';
 import { AppComponent } from './app/app.component';
+import { register as registerSwiperElement } from 'swiper/element/bundle';
 
+registerSwiperElement();
 bootstrapApplication(AppComponent, {
   providers: [
     { provide: RouteReuseStrategy, useClass: IonicRouteStrategy },

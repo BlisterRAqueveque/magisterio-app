@@ -1,4 +1,10 @@
-import { Component, HostListener, Input } from '@angular/core';
+import {
+  Component,
+  ElementRef,
+  HostListener,
+  Input,
+  ViewChild,
+} from '@angular/core';
 import { InputComponent } from '../input/input.component';
 import { IonIcon } from '@ionic/angular/standalone';
 import { NgIcon, provideIcons } from '@ng-icons/core';
@@ -26,4 +32,5 @@ import { CommonModule } from '@angular/common';
 })
 export class NavbarComponent {
   @Input() scroll = false;
+  @Input() height = 0;
 }

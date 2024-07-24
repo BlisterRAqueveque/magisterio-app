@@ -1,22 +1,25 @@
 <!-- py-0 -->
-<header class="header bg-sky-950 py-8 transition-all duration-500" [ngClass]="{ 'py-0 lg:sticky top-0': scroll }">
+<header #div class="header bg-sky-950 py-8 transition-all duration-500"
+  [ngClass]="{ 'lg:py-0 lg:sticky lg:top-0': scroll }">
 
   <div class="w-full p-2 center top-container text-white text-sm ">
     <img src="assets/img/logo.svg" alt="Mutual magisterio" width="50" height="50">
     <div>
       <a href="#" class="mr-3"><b>Sobre nosotros</b></a>
-      <a href="#"><ng-icon name="heroPhoneSolid" class="-mb-1" /><b [ngClass]="{ 'hidden': scroll }">Contáctenos</b></a>
+      <a href="#"><ng-icon name="heroPhoneSolid" class="-mb-1" /><b
+          [ngClass]="{ 'lg:hidden': scroll }">Contáctenos</b></a>
     </div>
   </div>
 
   <!-- hidden -->
-  <div [ngClass]="{ 'h-0': scroll }">
-    <h1 class="font-bold text-xl text-white text-center mb-3">Encuentra el alojamiento perfecto para tus vacaciones</h1>
-    <h5 class="text-white text-center mb-3">Explora destinos, encuentros a la perfección</h5>
+  <div [ngClass]="{ 'lg:h-0': scroll }">
+    <h1 [ngClass]="{ 'lg:h-0': scroll }" class="font-bold text-xl text-white text-center mb-3">Encuentra el alojamiento perfecto para tus vacaciones</h1>
+    <h5 [ngClass]="{ 'lg:h-0': scroll }" class="text-white text-center mb-3">Explora destinos, encuentros a la perfección</h5>
   </div>
 
   <!-- absolute top-0 mt-3 -->
-  <div class="lg:px-48 md:px-10 px-10 w-full" [ngClass]="{ 'absolute top-0 mt-3 left-1/2 -translate-x-1/2': scroll }">
+  <div class="lg:px-48 md:px-10 px-10 w-full"
+    [ngClass]="{ 'lg:absolute lg:top-0 lg:mt-3 lg:left-1/2 lg:-translate-x-1/2': scroll }" id="search">
     <div class="bg-white p-4 rounded-md shadow-md">
       <div class="grid grid-cols-12 gap-4">
         <div class="lg:col-span-3 sm:col-span-12 md:col-span-12 col-span-12">
@@ -42,3 +45,6 @@
     </div>
   </div>
 </header>
+
+<!-- Cuando se cambia a sticky, este div pasa a tomar el height del header -->
+<div class="w-full lg:block hidden" [style.height.px]="height"></div>
