@@ -1,5 +1,21 @@
-<select name="select" class="w-full border shadow-sm bg-white rounded-md h-9 focus:outline-none">
-  <option value="-1" selected>{{ placeholder }}</option>
-  <option value="value1">Value 1</option>
-  <option value="value3">Value 3</option>
-</select>
+<div class="pt-5 relative">
+  <!--top-0-->
+  <p class="absolute left-2 bottom-2 transition-all duration-300 pointer-events-none" [ngClass]="{ 'top-0': focus || value,
+    'top-[30px]': !focus && !value, 'left-2': !focus && !value, 'left-3': focus || value, 'text-base': !focus && !value,
+    'text-sm': focus || value, 'text-gray-600': !focus && !value, 'text-black': focus || value }">
+    {{ placeholder }}</p>
+  <select name="select" (focus)="focus = true" (blur)="focus = false" [(ngModel)]="value" (ngModelChange)="getValue()"
+    class="custom-select w-full border shadow-sm bg-white rounded-md h-11 focus:outline-none">
+    @if(options) {
+    @for (item of options; track $index) {
+    <option class="p-4" [value]="item[optionLabel]">{{ item[optionValue] }}</option>
+    }
+    } @else {
+    <option value="-1" disabled>Sin opciones disponibles</option>
+    }
+  </select>
+  @if(value) {
+  <ng-icon name="heroXMarkSolid" class="top-[32px] text-xl right-6 absolute cursor-pointer" @fadeInOut
+    (click)="deleteValue()" />
+  }
+</div>

@@ -1,31 +1,16 @@
-import {
-  Component,
-  ElementRef,
-  HostListener,
-  Input,
-  ViewChild,
-} from '@angular/core';
-import { InputComponent } from '../input/input.component';
-import { IonIcon } from '@ionic/angular/standalone';
-import { NgIcon, provideIcons } from '@ng-icons/core';
-import {
-  heroArrowsRightLeftSolid,
-  heroMagnifyingGlassSolid,
-  heroPhoneSolid,
-} from '@ng-icons/heroicons/solid';
-import { SelectComponent } from '../select/select.component';
 import { CommonModule } from '@angular/common';
+import { Component, ContentChild, Input, TemplateRef } from '@angular/core';
+import { NgIcon, provideIcons } from '@ng-icons/core';
+import { heroPhoneSolid } from '@ng-icons/heroicons/solid';
 
 @Component({
   standalone: true,
   selector: 'm-navbar',
   templateUrl: './navbar.component.html',
   styleUrls: ['./navbar.component.scss'],
-  imports: [InputComponent, SelectComponent, IonIcon, NgIcon, CommonModule],
+  imports: [NgIcon, CommonModule],
   providers: [
     provideIcons({
-      heroArrowsRightLeftSolid,
-      heroMagnifyingGlassSolid,
       heroPhoneSolid,
     }),
   ],
@@ -33,4 +18,6 @@ import { CommonModule } from '@angular/common';
 export class NavbarComponent {
   @Input() scroll = false;
   @Input() height = 0;
+
+  @ContentChild('customContent') customContent!: TemplateRef<any>;
 }

@@ -56,7 +56,7 @@
 }
 
 input[type="date"]::-webkit-calendar-picker-indicator {
-  background-color: #F7D0B6; /* Se invierte el color final para que quede el real #082f49 */
+  background-color: #f7d0b6; /* Se invierte el color final para que quede el real #082f49 */
   border-radius: 50%;
   padding: 5px;
   cursor: pointer;
@@ -93,3 +93,22 @@ input[type="date"]::-webkit-calendar-picker-indicator {
   }
 }
 /* End ripple button effects */
+
+/* Show | Hide containers */
+.hide {
+  overflow: hidden;
+  transition: all 0.3s ease;
+  padding: 0;
+  display: grid !important;
+  grid-template-rows: 0fr;
+}
+
+.hide > div {
+  overflow: hidden;
+}
+
+.show {
+  grid-template-rows: 1fr;
+  transition: all 0.3s ease;
+}
+/* End Show | Hide containers */

@@ -1,3 +1,4 @@
+import { CommonModule } from '@angular/common';
 import { Component, CUSTOM_ELEMENTS_SCHEMA } from '@angular/core';
 import {
   IonContent,
@@ -10,8 +11,12 @@ import {
   heroChevronLeftSolid,
   heroChevronRightSolid,
 } from '@ng-icons/heroicons/solid';
+import { CalendarComponent } from '../components/calendar/calendar.component';
 import { CardComponent } from '../components/card/card.component';
+import { FooterComponent } from '../components/footer/footer.component';
 import { NavbarComponent } from '../components/navbar/navbar.component';
+import { SelectComponent } from '../components/select/select.component';
+import { ModalComponent } from '../components/modal/modal.component';
 
 @Component({
   selector: 'app-home',
@@ -23,9 +28,14 @@ import { NavbarComponent } from '../components/navbar/navbar.component';
     IonToolbar,
     IonTitle,
     IonContent,
+    CommonModule,
     NavbarComponent,
     CardComponent,
+    FooterComponent,
     NgIcon,
+    CalendarComponent,
+    SelectComponent,
+    ModalComponent,
   ],
   providers: [provideIcons({ heroChevronLeftSolid, heroChevronRightSolid })],
   schemas: [CUSTOM_ELEMENTS_SCHEMA],
@@ -36,7 +46,7 @@ export class HomePage {
   /** @description Guarda el height de los elementos sticky */
   height = 0;
   onScroll(event: CustomEvent) {
-    if (event.detail.scrollTop < 50) {
+    if (event.detail.scrollTop < 1) {
       this.isScroll = false;
       this.height = 0;
     } else {
@@ -68,4 +78,28 @@ export class HomePage {
       spaceBetween: 40,
     },
   };
+
+  options = [
+    {
+      id: 1,
+      value: 'Distrito 1',
+    },
+    {
+      id: 2,
+      value: 'Distrito 2',
+    },
+    {
+      id: 3,
+      value: 'Distrito 3',
+    },
+  ];
+
+  /** @description Valor del distrito seleccionado */
+  distrito!: any;
+
+  /**
+   * @description
+   * Reinicia los valores de las variables instanciadas
+   */
+  restartValues() {}
 }

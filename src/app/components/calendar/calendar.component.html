@@ -1,0 +1,76 @@
+<div class="hide" [ngClass]="{ 'show': show }">
+  <div>
+    <div class="rounded-md shadow-lg p-2 m-3">
+      <div class="grid grid-cols-12 gap-4 text-center p-3">
+        <div class="col-span-4 flex justify-end items-center">
+          <button (click)="anteriorMes()" class="text-white bg-mag-300 shadow-lg rounded-full
+            flex p-2 justify-start items-center hover:bg-mag-600 transition-all duration-300">
+            <ng-icon name="heroChevronLeftSolid" size="1.4rem" />
+          </button>
+        </div>
+        <div class="col-span-4 flex justify-center items-center">
+          <p class="text-xl font-bold">{{ mesActual[0] | date: 'MMMM yyyy' }}</p>
+        </div>
+        <div class="col-span-4 flex justify-start items-center">
+          <button (click)="siguienteMes()" class="text-white bg-mag-300 shadow-lg rounded-full
+            flex p-2 justify-start items-center hover:bg-mag-600 transition-all duration-300">
+            <ng-icon name="heroChevronRightSolid" size="1.4rem" />
+          </button>
+        </div>
+      </div>
+      <div class="flex justify-center items-center">
+        <div>
+
+          <table class="text-center">
+            <!-- Días semana | Header -->
+            <tr>
+              @for (s of semana; track $index) {
+              <th class="p-1 lg:w-14 lg:h-14 md:w-12 md:h-12 sm:w-10 sm:h-10 w-10 h-10">
+                <div class="bg-white w-full h-full rounded-md flex justify-center items-center shadow-lg">
+                  {{ s.nombreShort }}
+                </div>
+              </th>
+              }
+            </tr>
+
+            <tbody>
+              <!-- Recorremos las semanas -->
+              @for (semana of porSemana(mesAnterior, mesActual, mesProximo); track $index) {
+              <tr>
+                <!-- Recorremos los días de la semana -->
+                @for (d of semana; track $index) {
+                <td class="p-1 lg:w-14 lg:h-14 md:w-12 md:h-12 sm:w-10 sm:h-10 w-10 h-10">
+                  <button appPress (press)="press($event, d)" (mouseover)="select(d)" class="w-full h-full rounded-md px-2
+                    hover:bg-mag-300 hover:text-white transition-all duration-300" [ngClass]="{
+                      'opacity-40': !isMonth(d),
+                      'bg-mag-300': compareDate(d),
+                      'text-white': compareDate(d),
+                      'text-mag-900': betweenDate(d),
+                      'bg-mag-100': betweenDate(d),
+                      'border-mag-100': betweenDate(d),
+                      'shadow-lg': betweenDate(d) || compareDate(d)
+                    }" (click)="setDays(d)">
+                    <p class="lg:text-lg md:text-base sm:text-sm text-sm">
+                      {{ d | date: 'dd' }}
+                    </p>
+                  </button>
+                </td>
+                }
+              </tr>
+              }
+            </tbody>
+          </table>
+        </div>
+      </div>
+      <div class="w-full text-center my-4">
+        <h5><b>Fecha desde:</b> {{ desde ? (desde | date: 'dd/MM/yyyy') : 'No seleccionado.' }} |
+          <b>Fecha hasta:</b> {{ hasta ? (hasta | date: 'dd/MM/yyyy') : 'No seleccionado.' }}
+        </h5>
+      </div>
+      <!-- <div class="w-full text-end mt-2">
+        <button class="bg-mag-300 text-white p-2 rounded-lg shadow-lg hover:bg-mag-600
+          duration-200 transition-all lg:text-base md:text-base sm:text-sm text-sm">Aceptar</button>
+      </div> -->
+    </div>
+  </div>
+</div>

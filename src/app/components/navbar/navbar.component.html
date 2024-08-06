@@ -1,5 +1,5 @@
 <!-- py-0 -->
-<header #div class="header bg-sky-950 py-8 transition-all duration-500"
+<header #div class="header bg-mag-900 py-8 transition-all duration-500"
   [ngClass]="{ 'lg:py-0 lg:sticky lg:top-0': scroll }">
 
   <div class="w-full p-2 center top-container text-white text-sm ">
@@ -13,34 +13,18 @@
 
   <!-- hidden -->
   <div [ngClass]="{ 'lg:h-0': scroll }">
-    <h1 [ngClass]="{ 'lg:h-0': scroll }" class="font-bold text-xl text-white text-center mb-3">Encuentra el alojamiento perfecto para tus vacaciones</h1>
-    <h5 [ngClass]="{ 'lg:h-0': scroll }" class="text-white text-center mb-3">Explora destinos, encuentros a la perfección</h5>
+    <h1 [ngClass]="{ 'lg:h-0': scroll }" class="font-bold text-xl text-white text-center mb-3">Encuentra el alojamiento
+      perfecto para tus vacaciones</h1>
+    <h5 [ngClass]="{ 'lg:h-0': scroll }" class="text-white text-center mb-3">Explora destinos, encuentros a la
+      perfección</h5>
   </div>
 
   <!-- absolute top-0 mt-3 -->
-  <div class="lg:px-48 md:px-10 px-10 w-full"
-    [ngClass]="{ 'lg:absolute lg:top-0 lg:mt-3 lg:left-1/2 lg:-translate-x-1/2': scroll }" id="search">
-    <div class="bg-white p-4 rounded-md shadow-md">
-      <div class="grid grid-cols-12 gap-4">
-        <div class="lg:col-span-3 sm:col-span-12 md:col-span-12 col-span-12">
-          <m-input [type]="'date'" [placeholder]="'Seleccione fecha'" [label]="'Desde'" />
-        </div>
-        <div class="lg:col-span-1 sm:col-span-12 md:col-span-12 col-span-12 center item">
-          <div class="w-10 h-10 bg-white rounded-full shadow-md border center">
-            <ng-icon name="heroArrowsRightLeftSolid" size="1.4rem" />
-          </div>
-        </div>
-        <div class="lg:col-span-3 sm:col-span-12 md:col-span-12 col-span-12">
-          <m-input [type]="'date'" [placeholder]="'Seleccione fecha'" [label]="'Hasta'" />
-        </div>
-        <div class="lg:col-span-3 sm:col-span-12 md:col-span-6 col-span-12 justify-end items-end flex">
-          <m-select class="flex-1" [placeholder]="'Seleccione localidad'" />
-        </div>
-        <div class="lg:col-span-2 sm:col-span-12 md:col-span-6 col-span-12 flex justify-end items-end">
-          <button
-            class="w-full bg-sky-950 text-white h-9 rounded-md shadow-sm items-baseline center p-1 ripple-effect">Buscar
-            <ng-icon name="heroMagnifyingGlassSolid" class="ml-1" /></button>
-        </div>
+  <div class="w-full flex justify-center items-center"
+    [ngClass]="{ 'lg:absolute lg:top-0 lg:mt-3 lg:left-1/2 lg:-translate-x-1/2': scroll }">
+    <div class="max-w-[600px] flex-1" id="search">
+      <div class="bg-white p-4 rounded-md shadow-md">
+        <ng-container *ngTemplateOutlet="customContent"></ng-container>
       </div>
     </div>
   </div>

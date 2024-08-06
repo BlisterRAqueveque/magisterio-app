@@ -1,30 +1,45 @@
-<ion-content [fullscreen]="true" [scrollEvents]="true" (ionScroll)="onScroll($event)">
-  <m-navbar [scroll]="isScroll" [height]="height" />
+<ion-content [fullscreen]="true" [scrollEvents]="true" (ionScroll)="onScroll($event)" class="min-h-[100vh]">
+  <m-navbar [scroll]="isScroll" [height]="height">
+    <ng-template #customContent>
+      <!-- Select distrito -->
+      <m-select [placeholder]="'Seleccione un distrito'" [options]="options" [optionLabel]="'id'"
+        [optionValue]="'value'" [(selectedValue)]="distrito" (selectedValueChange)="restartValues()" />
+    </ng-template>
+  </m-navbar>
 
-  <div class="relative px-4">
-    <!-- Next button -->
-    <div class="rounded-full shadow-lg p-2 border flex justify-center items-center
-      absolute left-2 top-1/2 -translate-y-1/2 z-10 bg-white" (click)="swiper.swiper.slideNext()">
-      <ng-icon name="heroChevronLeftSolid" class="lg:text-2xl md:text-base" />
+  <div class="min-h-[46.9vh]">
+    <!-- Selección de la habitación disponible -->
+    <div class="w-full hide" [ngClass]="{ 'show': distrito }">
+      <div class="flex justify-center items-center w-full">
+        <div class="p-4 max-w-[600px] w-full flex-1">
+          <m-select />
+        </div>
+      </div>
     </div>
-    <!-- Swiper container -->
-    <swiper-container #swiper id="swiper" [breakpoints]="breakpoints" slides-per-view="1" loop="true" speed="500"
-      autoplay="true" delay="1500">
-      <swiper-slide>
-        <m-card />
-      </swiper-slide>
-      <swiper-slide>
-        <m-card />
-      </swiper-slide>
-    </swiper-container>
-    <!-- Previous button -->
-    <div class="rounded-full shadow-lg p-2 border flex justify-center items-center
-      absolute right-2 top-1/2 -translate-y-1/2 z-10 bg-white" (click)="swiper.swiper.slidePrev()">
-      <ng-icon name="heroChevronRightSolid" class="lg:text-2xl md:text-base" />
+
+    <!-- Selección de las fechas -->
+    <div class="w-full hide" [ngClass]="{ 'show': distrito }">
+      <div class="flex justify-center items-center w-full">
+        <div class="p-4 max-w-[600px] w-full flex-1">
+          <m-calendar [show]="true" />
+        </div>
+      </div>
+    </div>
+
+    <!-- Reglas de convivencia -->
+    <div class="w-full">
+      <div class="flex justify-center items-center w-full">
+        <div class="p-4 max-w-[600px] w-full flex-1">
+          <p><b class="text-red-900">Recuerde: </b> Lorem, ipsum dolor sit amet consectetur adipisicing elit. Nobis
+            porro earum ex aspernatur quaerat nihil tempora commodi eaque cumque sit quis alias, omnis rem voluptatum
+            fuga. Sapiente possimus consequuntur debitis.</p>
+        </div>
+      </div>
     </div>
   </div>
 
-  <div class="h-screen">
-  </div>
-  <div class="h-screen"></div>
+  <!-- Footer -->
+  <m-footer />
+
+  <m-modal />
 </ion-content>
