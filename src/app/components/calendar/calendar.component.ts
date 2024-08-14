@@ -186,12 +186,12 @@ export class CalendarComponent {
     return d < this.hasta! && d > this.desde!;
   }
 
-  @Output() selectedDay = new EventEmitter<{ desde: Date; hasta: Date }>();
-  sendDay() {
-    if (this.desde && this.hasta)
-      this.selectedDay.emit({ desde: this.desde, hasta: this.hasta });
-    else throw new Error('Faltan parámetros');
-  }
+  // @Output() selectedDay = new EventEmitter<{ desde: Date; hasta: Date }>();
+  // sendDay() {
+  //   if (this.desde && this.hasta)
+  //     this.selectedDay.emit({ desde: this.desde, hasta: this.hasta });
+  //   else throw new Error('Faltan parámetros');
+  // }
 
   isPressed = false;
 
@@ -203,6 +203,9 @@ export class CalendarComponent {
   }
 
   select(d: Date) {
-    if (this.isPressed) this.hasta = d;
+    if (this.isPressed) {
+      this.hasta = d;
+      this.dates.emit({ desde: this.desde, hasta: this.hasta });
+    }
   }
 }

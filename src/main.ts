@@ -15,6 +15,7 @@ import { AppComponent } from './app/app.component';
 import { routes } from './app/app.routes';
 import { LoaderComponent } from './app/components/loader/loader.component';
 import { LoaderService } from './app/components/loader/loader.service';
+import { provideHttpClient } from '@angular/common/http';
 
 registerSwiperElement();
 bootstrapApplication(AppComponent, {
@@ -23,7 +24,7 @@ bootstrapApplication(AppComponent, {
     provideIonicAngular(),
     provideRouter(routes, withPreloading(PreloadAllModules)),
     provideAnimations(),
-    //provideHttpClient(withInterceptors([jwtInterceptor])),
+    provideHttpClient(/*withInterceptors([jwtInterceptor])*/),
     LoaderComponent,
     LoaderService,
   ],

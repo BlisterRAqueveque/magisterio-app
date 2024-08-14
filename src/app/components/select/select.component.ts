@@ -6,7 +6,7 @@ import {
   animate,
 } from '@angular/animations';
 import { CommonModule } from '@angular/common';
-import { Component, Input, model } from '@angular/core';
+import { Component, EventEmitter, Input, model, Output } from '@angular/core';
 import { FormsModule } from '@angular/forms';
 import { NgIcon, provideIcons } from '@ng-icons/core';
 import { heroXMarkSolid } from '@ng-icons/heroicons/solid';
@@ -50,7 +50,9 @@ export class SelectComponent {
     }
   }
 
+  @Output() onDelete = new EventEmitter<boolean>(false);
   deleteValue() {
+    this.onDelete.emit(true);
     this.value = '';
     this.selectedValue.set(undefined);
   }

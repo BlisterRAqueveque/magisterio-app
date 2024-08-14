@@ -2,26 +2,53 @@
   <m-navbar [scroll]="isScroll" [height]="height">
     <ng-template #customContent>
       <!-- Select distrito -->
-      <m-select [placeholder]="'Seleccione un distrito'" [options]="options" [optionLabel]="'id'"
-        [optionValue]="'value'" [(selectedValue)]="distrito" (selectedValueChange)="restartValues()" />
+      <m-select placeholder="Seleccione una casa mutual" [options]="casas_mutuales" optionLabel="id" #casas
+        optionValue="nombre" [(selectedValue)]="casa_mutual" (selectedValueChange)="setHabitaciones($event)"
+        (onDelete)="resetValues()" />
     </ng-template>
   </m-navbar>
 
   <div class="min-h-[46.9vh]">
     <!-- Selección de la habitación disponible -->
-    <div class="w-full hide" [ngClass]="{ 'show': distrito }">
+    <div class="w-full hide" [ngClass]="{ 'show': casa_mutual }">
       <div class="flex justify-center items-center w-full">
         <div class="p-4 max-w-[600px] w-full flex-1">
-          <m-select />
+          <m-select placeholder="Seleccione una habitación" [options]="habitaciones" optionLabel="id" #hab
+            optionValue="nombre" [(selectedValue)]="habitacion" (selectedValueChange)="setServicios($event)" />
         </div>
       </div>
     </div>
 
+    <!-- Muestra los servicios -->
+    @if(servicios.length > 0) {
+    <h5 class="text-xl font-bold text-center">Servicios</h5>
+    <div class="flex justify-center">
+      <hr class="max-w-96 w-full">
+    </div>
+    <div class="flex justify-center items-center w-auto">
+      @for (servicio of servicios; track $index) {
+      <div class="flex justify-center items-center p-4">
+        <ng-icon name="heroHomeModernMini" class="mr-2" />
+        <p>{{ servicio }}</p>
+      </div>
+      }
+    </div>
+    }
+
     <!-- Selección de las fechas -->
-    <div class="w-full hide" [ngClass]="{ 'show': distrito }">
+    <div class="w-full hide" [ngClass]="{ 'show': habitacion }">
       <div class="flex justify-center items-center w-full">
         <div class="p-4 max-w-[600px] w-full flex-1">
-          <m-calendar [show]="true" />
+          <m-calendar [show]="true" (dates)="getDate($event)" #calendar />
+        </div>
+      </div>
+    </div>
+
+    <div class="w-full hide" [ngClass]="{ 'show': desde && hasta }">
+      <div>
+        <div class="w-full text-center py-6">
+          <button class="shadow-md rounded-md bg-mag-300 transition-all duration-300 hover:bg-mag-600
+          text-white p-3" (click)="visible = true">Reservar</button>
         </div>
       </div>
     </div>
@@ -41,5 +68,5 @@
   <!-- Footer -->
   <m-footer />
 
-  <m-modal />
+  <m-modal [(visible)]="visible" [desde]="desde!" [hasta]="hasta!" [habitacion]="habitacion!" (ended)="clear()" />
 </ion-content>

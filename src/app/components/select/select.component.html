@@ -6,7 +6,7 @@
     {{ placeholder }}</p>
   <select name="select" (focus)="focus = true" (blur)="focus = false" [(ngModel)]="value" (ngModelChange)="getValue()"
     class="custom-select w-full border shadow-sm bg-white rounded-md h-11 focus:outline-none">
-    @if(options) {
+    @if(options ? options.length > 0 : false) {
     @for (item of options; track $index) {
     <option class="p-4" [value]="item[optionLabel]">{{ item[optionValue] }}</option>
     }

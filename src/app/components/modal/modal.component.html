@@ -1,11 +1,41 @@
-<div class="h-screen w-screen bg-black/50 fixed top-0 left-0 z-50 flex justify-center items-center p-4" @fadeIn>
-  <div class="hide min-w-[50%] lg:max-w-[50%] md:max-w-[75%] w-full" [ngClass]="{ show: show }">
+@if(visible() === true) {
+<div class="h-screen w-screen fixed top-0 left-0 z-[500] flex justify-center items-center p-4" @fadeIn>
+  <div class="h-screen w-screen bg-black/50 fixed top-0 left-0 -z-0"></div>
+  <div class="hide min-w-[50%] lg:max-w-[50%] md:max-w-[75%] w-full z-10" [ngClass]="{ show: show }">
     <div>
       <div class="bg-white rounded-lg p-4 w-full">
         <div class="w-full">
-          <m-input />
+          <div class="grid grid-cols-12 gap-4 text-center p-3">
+            <div class="lg:col-span-6 md:col-span-6 sm:col-span-12 col-span-12">
+              <m-input [error]="error" label="Nombre" placeholder="Ingrese su nombre" type="text" [(value)]="nombre" />
+            </div>
+            <div class="lg:col-span-6 md:col-span-6 sm:col-span-12 col-span-12">
+              <m-input [error]="error" label="Apellido" placeholder="Ingrese su apellido" type="text"
+                [(value)]="apellido" />
+            </div>
+            <div class="lg:col-span-6 md:col-span-6 sm:col-span-12 col-span-12">
+              <m-input [error]="error" label="N° socio" placeholder="Ingrese su número de socio" type="text"
+                [(value)]="n_socio" />
+            </div>
+            <div class="lg:col-span-6 md:col-span-6 sm:col-span-12 col-span-12">
+              <m-input [error]="error" label="Teléfono" placeholder="Ingrese su número de teléfono" type="tel"
+                [(value)]="tel" />
+            </div>
+            <div class="lg:col-span-6 md:col-span-6 sm:col-span-12 col-span-12">
+              <m-input [error]="error" label="Correo electrónico" placeholder="Ingrese su correo electrónico"
+                type="email" [(value)]="correo" />
+            </div>
+          </div>
+
+          <div class="w-full text-end">
+            <button class="shadow-md rounded-md bg-mag-300 transition-all duration-300 hover:bg-mag-600
+              text-white p-3 mr-3" (click)="upload()">Cargar reserva</button>
+            <button class="shadow-md rounded-md bg-mag-800 transition-all duration-300 hover:bg-mag-900
+              text-white p-3" (click)="hide()">Cancelar</button>
+          </div>
         </div>
       </div>
     </div>
   </div>
 </div>
+}
