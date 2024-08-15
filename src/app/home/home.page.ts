@@ -107,9 +107,9 @@ export class HomePage {
   setServicios(habitacion?: HabitacionI) {
     if (habitacion) {
       this.servicios = habitacion.servicios;
-      this.reservaService
-        .getReservasHabitacion(habitacion.id)
-        .subscribe((data) => {});
+      this.calendar.getReservas(habitacion.id);
+    } else {
+      this.servicios = [];
     }
   }
 

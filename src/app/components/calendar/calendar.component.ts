@@ -1,11 +1,13 @@
 import { CommonModule } from '@angular/common';
-import { Component, EventEmitter, Input, Output } from '@angular/core';
+import { Component, EventEmitter, inject, Input, Output } from '@angular/core';
 import { NgIcon, provideIcons } from '@ng-icons/core';
 import {
   heroChevronLeftSolid,
   heroChevronRightSolid,
 } from '@ng-icons/heroicons/solid';
 import { PressDirective } from 'src/app/directives/press/press.directive';
+import { ReservaI } from 'src/app/models/reservas';
+import { ReservasService } from 'src/app/service/reservas.service';
 
 @Component({
   standalone: true,
@@ -59,6 +61,8 @@ export class CalendarComponent {
     this.mesAnterior = this.obtenerMes(mAnterior);
     this.mesActual = this.obtenerMes(this.hoy);
     this.mesProximo = this.obtenerMes(mProximo);
+
+    this.porSemana(this.mesAnterior, this.mesActual, this.mesProximo);
   }
   primerDia!: Date;
 
@@ -93,6 +97,14 @@ export class CalendarComponent {
     this.mesAnterior = this.obtenerMes(mAnterior);
     this.mesActual = this.obtenerMes(this.hoy);
     this.mesProximo = this.obtenerMes(mProximo);
+
+    this.porSemana(this.mesAnterior, this.mesActual, this.mesProximo);
+
+    this.semanas.forEach((d) => {
+      d.dias.forEach((dd) => {
+        this.datesReservadas(dd);
+      });
+    });
   }
 
   anteriorMes() {
@@ -106,11 +118,21 @@ export class CalendarComponent {
     this.mesAnterior = this.obtenerMes(mAnterior);
     this.mesActual = this.obtenerMes(this.hoy);
     this.mesProximo = this.obtenerMes(mProximo);
+
+    this.porSemana(this.mesAnterior, this.mesActual, this.mesProximo);
+
+    this.semanas.forEach((d) => {
+      d.dias.forEach((dd) => {
+        this.datesReservadas(dd);
+      });
+    });
   }
 
   porSemana(mesAnt: Date[], mes: Date[], mesPr: Date[]) {
-    const semanas: Date[][] = [];
-    let semana: Date[] = [];
+    const semanas: {
+      dias: { dia: Date; enable: boolean; reserva: boolean }[];
+    }[] = [];
+    let semana: { dia: Date; enable: boolean; reserva: boolean }[] = [];
     mes.forEach((d, i) => {
       /**
        * @description
@@ -121,36 +143,41 @@ export class CalendarComponent {
         let index = mesAnt.length - 1;
         for (let i = d.getDay(); i > 0; i--) {
           //* Agregamos los días en la lista
-          semana.unshift(mesAnt[index]);
+          semana.unshift({ dia: mesAnt[index], enable: true, reserva: false });
           index--;
         }
       }
       //* Pusheamos los días en la semana
-      semana.push(d);
+      semana.push({ dia: d, enable: true, reserva: false });
       if (semana.length === 7) {
         //* Pusheamos la semana en las semanas (en caso de cumplir la condición de ser 7 los días almacenados)
-        semanas.push(semana);
+        semanas.push({ dias: semana });
         //* Vaciamos la lista
         semana = [];
       } else if (i === mes.length - 1 && semana.length !== 7) {
         //* Si la semana no se completó, agregamos los días restantes
         let index = 0;
         for (let j = semana.length; j < 7; j++) {
-          semana.push(mesPr[index]);
+          semana.push({ dia: mesPr[index], enable: true, reserva: false });
           index++;
         }
         //* Pusheamos la semana en las semanas (en caso de cumplir la condición de ser 7 los días almacenados)
-        semanas.push(semana);
+        semanas.push({ dias: semana });
         //* Vaciamos la lista
         semana = [];
       }
     });
     //* Retornamos las semanas creadas
-    return semanas;
+    this.semanas = semanas;
   }
+
+  semanas: { dias: { dia: Date; enable: boolean; reserva: boolean }[] }[] = [];
 
   isMonth(date: Date) {
     return date.getMonth() === this.hoy.getMonth();
+  }
+  isMinusThanToday(date: Date) {
+    return date < new Date();
   }
 
   @Output() dates = new EventEmitter<{
@@ -163,10 +190,18 @@ export class CalendarComponent {
   setDays(date: Date) {
     if (!this.desde && !this.hasta) {
       this.desde = new Date(date);
-    } else if (this.desde && date < this.desde) {
+    } else if (
+      this.desde &&
+      date < this.desde &&
+      this.rangoDisponible(date, this.desde) //! En el rango disponible
+    ) {
       this.hasta = new Date(this.desde);
       this.desde = new Date(date);
-    } else if (this.desde && date > this.desde) {
+    } else if (
+      this.desde &&
+      date > this.desde &&
+      this.rangoDisponible(this.desde, date) //! En el rango disponible
+    ) {
       this.hasta = new Date(date);
     } else if (this.desde && date.getTime() == this.desde.getTime()) {
       this.desde = null;
@@ -203,9 +238,57 @@ export class CalendarComponent {
   }
 
   select(d: Date) {
-    if (this.isPressed) {
-      this.hasta = d;
-      this.dates.emit({ desde: this.desde, hasta: this.hasta });
-    }
+    if (this.desde)
+      if (
+        this.isPressed &&
+        this.rangoDisponible(this.desde, d) &&
+        !this.isMinusThanToday(d)
+      ) {
+        if (this.desde < d) {
+          this.hasta = d;
+          this.dates.emit({ desde: this.desde, hasta: this.hasta });
+        } else {
+          this.hasta = this.desde;
+          this.desde = d;
+        }
+      } else this.isPressed = false;
   }
+
+  // -------------------------------------------------------------------------------->
+  private readonly service = inject(ReservasService);
+  reservas: ReservaI[] = [];
+  en_espera: ReservaI[] = [];
+  getReservas(hab: number) {
+    this.service.getReservasHabitacion(hab).subscribe((data) => {
+      this.reservas = data.aprobados;
+      this.en_espera = data.en_espera;
+
+      this.semanas.forEach((d) => {
+        d.dias.forEach((dd) => {
+          this.datesReservadas(dd);
+        });
+      });
+    });
+  }
+
+  datesReservadas(dia: { dia: Date; enable: boolean; reserva: boolean }) {
+    // Si alguna reserva coincide, disable el día
+    dia.enable = !this.reservas.some(
+      (r) => dia.dia >= new Date(r.desde) && dia.dia <= new Date(r.hasta)
+    );
+    dia.reserva = this.en_espera.some(
+      (r) => dia.dia >= new Date(r.desde) && dia.dia <= new Date(r.hasta)
+    );
+  }
+
+  rangoDisponible(desde: Date, hasta: Date): boolean {
+    return !this.reservas.some((r) => {
+      return (
+        (desde >= new Date(r.desde) && desde <= new Date(r.hasta)) || // Caso 1: El inicio del rango está dentro de una reserva
+        (hasta >= new Date(r.desde) && hasta <= new Date(r.hasta)) || // Caso 2: El final del rango está dentro de una reserva
+        (desde <= new Date(r.desde) && hasta >= new Date(r.hasta)) // Caso 3: El rango completo envuelve una reserva
+      );
+    });
+  }
+  // -------------------------------------------------------------------------------->
 }

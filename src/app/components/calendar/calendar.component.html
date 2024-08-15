@@ -35,24 +35,36 @@
 
             <tbody>
               <!-- Recorremos las semanas -->
-              @for (semana of porSemana(mesAnterior, mesActual, mesProximo); track $index) {
+              @for (semana of semanas; track $index) {
               <tr>
                 <!-- Recorremos los días de la semana -->
-                @for (d of semana; track $index) {
+                @for (d of semana.dias; track $index) {
                 <td class="p-1 lg:w-14 lg:h-14 md:w-12 md:h-12 sm:w-10 sm:h-10 w-10 h-10">
-                  <button appPress (press)="press($event, d)" (mouseover)="select(d)" class="w-full h-full rounded-md px-2
-                    hover:bg-mag-300 hover:text-white transition-all duration-300" [ngClass]="{
-                      'opacity-40': !isMonth(d),
-                      'bg-mag-300': compareDate(d),
-                      'text-white': compareDate(d),
-                      'text-mag-900': betweenDate(d),
-                      'bg-mag-100': betweenDate(d),
-                      'border-mag-100': betweenDate(d),
-                      'shadow-lg': betweenDate(d) || compareDate(d)
-                    }" (click)="setDays(d)">
+                  <button appPress (press)="press($event, d.dia)" (mouseover)="select(d.dia)" class="group w-full h-full
+                    rounded-md px-2 transition-all duration-300 relative" [ngClass]="{
+                      'opacity-40': !isMonth(d.dia) || isMinusThanToday(d.dia),
+                      'bg-mag-300': compareDate(d.dia) && d.enable,
+                      'text-white': compareDate(d.dia) && d.enable,
+                      'text-mag-900': betweenDate(d.dia) && d.enable,
+                      'bg-mag-100': betweenDate(d.dia) && d.enable,
+                      'border-mag-100': betweenDate(d.dia) && d.enable,
+                      'shadow-lg': betweenDate(d.dia) || compareDate(d.dia) && d.enable,
+                      'bg-gray-50 shadow-inner': !d.enable,
+                      'hover:bg-mag-300 hover:text-white': d.enable && !isMinusThanToday(d.dia),
+                      'bg-mag-50 shadow-inner': d.reserva
+                    }" (click)="setDays(d.dia)" [disabled]="!d.enable || isMinusThanToday(d.dia)">
                     <p class="lg:text-lg md:text-base sm:text-sm text-sm">
-                      {{ d | date: 'dd' }}
+                      {{ d.dia | date: 'dd' }}
                     </p>
+
+                    <!-- Tooltip -->
+                    @if(!d.enable || d.reserva || isMinusThanToday(d.dia)) {
+                    <div class="absolute z-50 left-1/2 -translate-x-1/2 py-2 bottom-[102%] px-3 rounded-md bg-black/60
+                      w-auto whitespace-nowrap text-sm text-white shadow-md transition-all duration-200 opacity-0
+                      group-hover:opacity-100 pointer-events-none">
+                      {{ (!d.enable || isMinusThanToday(d.dia)) ? 'Fecha no disponible' : 'Fecha reservada'}}
+                    </div>
+                    }
                   </button>
                 </td>
                 }
@@ -67,10 +79,40 @@
           <b>Fecha hasta:</b> {{ hasta ? (hasta | date: 'dd/MM/yyyy') : 'No seleccionado.' }}
         </h5>
       </div>
-      <!-- <div class="w-full text-end mt-2">
-        <button class="bg-mag-300 text-white p-2 rounded-lg shadow-lg hover:bg-mag-600
-          duration-200 transition-all lg:text-base md:text-base sm:text-sm text-sm">Aceptar</button>
-      </div> -->
+
     </div>
   </div>
+
+  <div class="w-full center">
+    <div class="max-w-96 w-full flex mt-4 flex-col justify-start items-start">
+      <h4 class="text-xl mb-3 flex-1 text-center w-full"><b>Referencias:</b></h4>
+      <div class="center mb-4">
+        <div class="w-10 h-10 bg-mag-50 shadow-inner rounded-md px-2 center mr-3">
+          <p class="lg:text-lg md:text-base sm:text-sm text-sm">
+            {{ hoy.getDate() }}
+          </p>
+        </div>
+        <p class="text-center text-sm">Día reservado, a la espera de una aprobación</p>
+      </div>
+
+      <div class="center mb-4">
+        <div class="w-10 h-10 bg-gray-50 shadow-inner rounded-md px-2 center mr-3">
+          <p class="lg:text-lg md:text-base sm:text-sm text-sm">
+            {{ hoy.getDate() }}
+          </p>
+        </div>
+        <p class="text-center text-sm">Día reservado, ya no disponible para la reserva</p>
+      </div>
+
+      <div class="center">
+        <div class="w-10 h-10 opacity-40 rounded-md px-2 center mr-3">
+          <p class="lg:text-lg md:text-base sm:text-sm text-sm">
+            {{ hoy.getDate() }}
+          </p>
+        </div>
+        <p class="text-center text-sm">Día no disponible (fechas anteriores a la actual)</p>
+      </div>
+    </div>
+  </div>
+
 </div>

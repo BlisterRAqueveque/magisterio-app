@@ -18,9 +18,12 @@ export class ReservasService {
 
   getReservasHabitacion(id: number) {
     const direction = this.url + 'room/' + id;
-    return this.http.get<ResponseI>(direction).pipe(
+    return this.http.get<any>(direction).pipe(
       catchError((e) => handleError(e)),
-      map((data) => data.result)
+      map(
+        (data) =>
+          data.result as { aprobados: ReservaI[]; en_espera: ReservaI[] }
+      )
     );
   }
 
