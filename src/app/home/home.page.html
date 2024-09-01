@@ -5,6 +5,8 @@
       <m-select placeholder="Seleccione una casa mutual" [options]="casas_mutuales" optionLabel="id" #casas
         optionValue="nombre" [(selectedValue)]="casa_mutual" (selectedValueChange)="setHabitaciones($event)"
         (onDelete)="resetValues()" />
+      <p class="text-center mt-2">Ó</p>
+      <a href="/scanner" class="text-center w-full block text-lg text-mag-800"><b>Escanee para dar asistencia</b></a>
     </ng-template>
   </m-navbar>
 

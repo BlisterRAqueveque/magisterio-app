@@ -1,7 +1,7 @@
 <div class="w-full text-start">
-  <label class="font-bold pl-3" [ngClass]="{ 'text-red-500': error && !value() }">{{ label }}</label>
+  <label class="font-bold pl-3 text-black" [ngClass]="{ 'text-red-500': error && !value() }">{{ label }}</label>
   <input [type]="type" [placeholder]="placeholder" class="w-full border shadow-sm bg-white rounded-md p-3
-    focus:outline-none" [ngClass]="{ 'border-red-500': error && !value() }" [(ngModel)]="value">
+    focus:outline-none text-black" [ngClass]="{ 'border-red-500': error && !value() }" [(ngModel)]="value">
   <div class="hide" [ngClass]="{ show: error && !value() }">
     <div>
       <p class="text-red-500 pl-3">Fata completar *</p>

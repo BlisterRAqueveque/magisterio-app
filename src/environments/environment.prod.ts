@@ -1,4 +1,5 @@
 export const environment = {
   production: true,
-  url:'http://localhost:3000/api/'
+  // url:'https://magisterio.hvdevs.com/api/'
+  url: 'https://p90dm6pr-3045.brs.devtunnels.ms/api/',
 };

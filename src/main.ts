@@ -1,3 +1,4 @@
+import { provideHttpClient } from '@angular/common/http';
 import { bootstrapApplication } from '@angular/platform-browser';
 import { provideAnimations } from '@angular/platform-browser/animations';
 import {
@@ -15,7 +16,6 @@ import { AppComponent } from './app/app.component';
 import { routes } from './app/app.routes';
 import { LoaderComponent } from './app/components/loader/loader.component';
 import { LoaderService } from './app/components/loader/loader.service';
-import { provideHttpClient } from '@angular/common/http';
 
 registerSwiperElement();
 bootstrapApplication(AppComponent, {

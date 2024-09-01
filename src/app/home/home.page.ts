@@ -1,9 +1,8 @@
 import { CommonModule } from '@angular/common';
 import {
   Component,
-  CUSTOM_ELEMENTS_SCHEMA,
   inject,
-  ViewChild,
+  ViewChild
 } from '@angular/core';
 import {
   IonContent,
@@ -12,20 +11,20 @@ import {
   IonToolbar,
 } from '@ionic/angular/standalone';
 import { NgIcon, provideIcons } from '@ng-icons/core';
+import { heroHomeModernMini } from '@ng-icons/heroicons/mini';
 import {
   heroChevronLeftSolid,
   heroChevronRightSolid,
 } from '@ng-icons/heroicons/solid';
-import { heroHomeModernMini } from '@ng-icons/heroicons/mini';
 import { CalendarComponent } from '../components/calendar/calendar.component';
 import { CardComponent } from '../components/card/card.component';
 import { FooterComponent } from '../components/footer/footer.component';
+import { ModalComponent } from '../components/modal/modal.component';
 import { NavbarComponent } from '../components/navbar/navbar.component';
 import { SelectComponent } from '../components/select/select.component';
-import { ModalComponent } from '../components/modal/modal.component';
-import { CasasMutualesService } from '../service/casas-mutuales.service';
 import { CasaMutualI } from '../models/casa-mutual';
 import { HabitacionI } from '../models/habitaciones';
+import { CasasMutualesService } from '../service/casas-mutuales.service';
 import { ReservasService } from '../service/reservas.service';
 
 @Component({
