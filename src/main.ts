@@ -21,7 +21,7 @@ registerSwiperElement();
 bootstrapApplication(AppComponent, {
   providers: [
     { provide: RouteReuseStrategy, useClass: IonicRouteStrategy },
-    provideIonicAngular(),
+    provideIonicAngular({ hardwareBackButton: true }),
     provideRouter(routes, withPreloading(PreloadAllModules)),
     provideAnimations(),
     provideHttpClient(/*withInterceptors([jwtInterceptor])*/),

@@ -6,98 +6,103 @@
     <ion-title class="text-base">Escanee el QR para dar de alta su visita</ion-title>
   </ion-toolbar>
 </ion-header>
-<ion-content class="ion-padding">
-  <ion-card>
-    <ion-card-header>
-      <ion-card-title>¿Como funciona?</ion-card-title>
-    </ion-card-header>
-    <ion-card-content>
-      En su instancia en las parcelas, debe escanear el QR provisto, para dar de alta su visita. Una vez que abandona el
-      lugar, debe escanear nuevamente, para dar de baja la misma
-    </ion-card-content>
-  </ion-card>
+<ion-content>
 
-  <!-- SCAN RESULT -->
-  <ion-card>
-    <ion-card-content *ngIf="parcela">
+  <div class="ion-padding">
+    <ion-card>
+      <ion-card-header>
+        <ion-card-title>¿Como funciona?</ion-card-title>
+      </ion-card-header>
+      <ion-card-content>
+        En su instancia en las parcelas, debe escanear el QR provisto, para dar de alta su visita. Una vez que abandona
+        el
+        lugar, debe escanear nuevamente, para dar de baja la misma
+      </ion-card-content>
+    </ion-card>
 
-      <ion-item>
-        <ion-label position="fixed">Parcela</ion-label>
-        <ion-input type="text" readonly [value]="parcela.nombre"></ion-input>
-      </ion-item>
+    <!-- SCAN RESULT -->
+    <ion-card>
+      <ion-card-content *ngIf="parcela">
 
-      <ion-item>
-        <ion-label position="fixed">Casa mutual</ion-label>
-        <ion-input type="text" readonly [value]="parcela.casa_mutual"></ion-input>
-      </ion-item>
+        <ion-item>
+          <ion-label position="fixed">Parcela</ion-label>
+          <ion-input type="text" readonly [value]="parcela.nombre"></ion-input>
+        </ion-item>
 
-      <!-- Solo es para marcar registro de los ingresos? O controlar quien esta y los disponibles? -->
-      <!-- Da ingreso por número de socio -->
-      <div class="flex w-full justify-around mt-4">
-        <button [disabled]="status == 1 ? false : true" class="rounded-md mb-2 text-white p-3 text-lg"
-          [ngClass]="{'shadow-md bg-mag-300 transition-all duration-300 hover:bg-mag-600': status == 1, 'bg-mag-100': status != 1}"
-          (click)="visible = true">Marcar ingreso</button>
+        <ion-item>
+          <ion-label position="fixed">Casa mutual</ion-label>
+          <ion-input type="text" readonly [value]="parcela.casa_mutual"></ion-input>
+        </ion-item>
 
-        <button [disabled]="status == 0 ? false : true" class="rounded-md mb-2 text-white p-3 text-lg"
-          [ngClass]="{ 'bg-mag-800 transition-all duration-300 hover:bg-mag-900 shadow-md': status == 0, 'bg-mag-100': status != 0 }"
-          (click)="visible = true">Marcar salida</button>
-      </div>
+        <!-- Solo es para marcar registro de los ingresos? O controlar quien esta y los disponibles? -->
+        <!-- Da ingreso por número de socio -->
+        <div class="flex w-full justify-around mt-4">
+          <button [disabled]="status == 1 ? false : true" class="rounded-md mb-2 text-white p-3 text-lg"
+            [ngClass]="{'shadow-md bg-mag-300 transition-all duration-300 hover:bg-mag-600': status == 1, 'bg-mag-100': status != 1}"
+            (click)="visible = true">Marcar ingreso</button>
 
-    </ion-card-content>
+          <button [disabled]="status == 0 ? false : true" class="rounded-md mb-2 text-white p-3 text-lg"
+            [ngClass]="{ 'bg-mag-800 transition-all duration-300 hover:bg-mag-900 shadow-md': status == 0, 'bg-mag-100': status != 0 }"
+            (click)="visible = true">Marcar salida</button>
+        </div>
 
-  </ion-card>
+      </ion-card-content>
 
-  <ion-card>
-    <ion-card-header>
-      <ion-card-title>Escanear</ion-card-title>
-    </ion-card-header>
-    <ion-card-content>
+    </ion-card>
 
-      <button class="rounded-md mb-2 text-white p-3 w-full text-lg" [ngClass]="{ 'shadow-md bg-mag-300 transition-all
-        duration-300 hover:bg-mag-600': isSupported, 'bg-mag-200': !isSupported }" (click)="presentModal()"
-        [disabled]="!isSupported">Escanear</button>
+    <ion-card>
+      <ion-card-header>
+        <ion-card-title>Escanear</ion-card-title>
+      </ion-card-header>
+      <ion-card-content>
 
-      <button class="rounded-md mb-2 text-white p-3 w-full text-lg" [ngClass]="{ 'shadow-md bg-mag-300 transition-all
-        duration-300 hover:bg-mag-600': isSupported, 'bg-mag-200': !isSupported }" (click)="readBarcodeFromImage()"
-        [disabled]="!isSupported">Leer QR desde una imagen</button>
+        <button class="rounded-md mb-2 text-white p-3 w-full text-lg" [ngClass]="{ 'shadow-md bg-mag-300 transition-all
+          duration-300 hover:bg-mag-600': isSupported, 'bg-mag-200': !isSupported }" (click)="presentModal()"
+          [disabled]="!isSupported">Escanear</button>
 
-      <button class="shadow-md rounded-md mb-2 bg-mag-300 transition-all duration-300 hover:bg-mag-600
-        text-white p-3 w-full text-lg" (click)="show = !show">Introducir manualmente</button>
+        <button class="rounded-md mb-2 text-white p-3 w-full text-lg" [ngClass]="{ 'shadow-md bg-mag-300 transition-all
+          duration-300 hover:bg-mag-600': isSupported, 'bg-mag-200': !isSupported }" (click)="readBarcodeFromImage()"
+          [disabled]="!isSupported">Leer QR desde una imagen</button>
 
-      <div class="hide" [ngClass]="{ show: show }">
-        <div class="w-full pr-6">
-          <div class="my-3">
-            <m-input placeholder="Ingrese n° parcela" #input />
+        <button class="shadow-md rounded-md mb-2 bg-mag-300 transition-all duration-300 hover:bg-mag-600
+          text-white p-3 w-full text-lg" (click)="show = !show">Introducir manualmente</button>
 
-            <div class="text-end my-4">
-              <button class="shadow-md rounded-md mb-2 bg-mag-300 transition-all duration-300 hover:bg-mag-600
-              text-white p-3 text-lg" (click)="closeModal(undefined, input.value())">Cargar</button>
+        <div class="hide" [ngClass]="{ show: show }">
+          <div class="w-full pr-6">
+            <div class="my-3">
+              <m-input placeholder="Ingrese n° parcela" #input />
+
+              <div class="text-end my-4">
+                <button class="shadow-md rounded-md mb-2 bg-mag-300 transition-all duration-300 hover:bg-mag-600
+                text-white p-3 text-lg" (click)="closeModal(undefined, input.value())">Cargar</button>
+              </div>
             </div>
           </div>
         </div>
-      </div>
 
-      <button class="rounded-md mb-2 text-white p-3 w-full text-lg" [ngClass]="{ 'shadow-md bg-mag-300 transition-all
-        duration-300 hover:bg-mag-600': isSupported, 'bg-mag-200': !isSupported }" (click)="openSettings()"
-        [disabled]="!isSupported">Abrir configuración</button>
+        <button class="rounded-md mb-2 text-white p-3 w-full text-lg" [ngClass]="{ 'shadow-md bg-mag-300 transition-all
+          duration-300 hover:bg-mag-600': isSupported, 'bg-mag-200': !isSupported }" (click)="openSettings()"
+          [disabled]="!isSupported">Abrir configuración</button>
 
-      <button class="shadow-md rounded-md mb-2 bg-mag-300 transition-all duration-300 hover:bg-mag-600
-          text-white p-3 w-full text-lg" (click)="requestPermissions()">Solicitar permisos de cámara</button>
+        <button class="shadow-md rounded-md mb-2 bg-mag-300 transition-all duration-300 hover:bg-mag-600
+            text-white p-3 w-full text-lg" (click)="requestPermissions()">Solicitar permisos de cámara</button>
 
-    </ion-card-content>
-  </ion-card>
+      </ion-card-content>
+    </ion-card>
 
-  <ion-card>
-    <ion-card-header>
-      <ion-card-title>Ubicaciones</ion-card-title>
-    </ion-card-header>
-    <ion-card-content>
-      <pinch-zoom>
-        <img src="/assets/img/map.jpg" />
-      </pinch-zoom>
-    </ion-card-content>
-  </ion-card>
+    <ion-card>
+      <ion-card-header>
+        <ion-card-title>Ubicaciones</ion-card-title>
+      </ion-card-header>
+      <ion-card-content>
+        <pinch-zoom>
+          <img src="/assets/img/map.jpg" />
+        </pinch-zoom>
+      </ion-card-content>
+    </ion-card>
+  </div>
 
+  <m-footer />
 
 </ion-content>
 

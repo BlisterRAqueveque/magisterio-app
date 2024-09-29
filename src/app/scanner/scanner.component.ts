@@ -45,16 +45,17 @@ import {
   IonTitle,
   IonToolbar,
 } from '@ionic/angular/standalone';
+import { PinchZoomModule } from '@meddv/ngx-pinch-zoom';
 import { addIcons } from 'ionicons';
 import { close, flashlight, image } from 'ionicons/icons';
 import { firstValueFrom } from 'rxjs';
 import { DialogService } from '../components/confirm-dialog/dialog.service';
+import { FooterComponent } from '../components/footer/footer.component';
+import { InputComponent } from '../components/input/input.component';
+import { LoaderService } from '../components/loader/loader.service';
 import { ModalParcelasComponent } from '../components/modal-parcelas/modal-parcelas.component';
 import { PopupService } from '../components/popup/popup.service';
 import { IngresosService } from '../service/ingresos.service';
-import { LoaderService } from '../components/loader/loader.service';
-import { PinchZoomComponent, PinchZoomModule } from '@meddv/ngx-pinch-zoom';
-import { InputComponent } from '../components/input/input.component';
 import { ParcelasService } from '../service/parcelas.service';
 
 export interface Data {
@@ -95,6 +96,7 @@ export interface Data {
     ModalParcelasComponent,
     PinchZoomModule,
     InputComponent,
+    FooterComponent,
   ],
   selector: 'app-scanner',
   templateUrl: './scanner.component.html',

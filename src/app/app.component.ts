@@ -1,5 +1,9 @@
-import { Component, HostListener } from '@angular/core';
+import { Location } from '@angular/common';
+import { Component, HostListener, inject } from '@angular/core';
+import { App } from '@capacitor/app';
+import { Platform } from '@ionic/angular';
 import { IonApp, IonRouterOutlet } from '@ionic/angular/standalone';
+import { AlertService } from './service/alert.service';
 
 @Component({
   selector: 'app-root',
@@ -40,4 +44,44 @@ export class AppComponent {
     const scrollTop = element.scrollTop;
     console.log('Posición de desplazamiento:', scrollTop);
   }
+
+  ngOnInit() {
+    this.configureBackButton();
+  }
+
+  //! BACK BUTTON --------------------------------------------------------------------------------------->
+  private readonly location = inject(Location);
+  private readonly alert = inject(AlertService);
+  private readonly platform = inject(Platform);
+
+  /**
+   * @description
+   * Configuramos el back button de la app.
+   */
+  configureBackButton() {
+    this.platform.backButton.subscribeWithPriority(10, async () => {
+      //* La URL donde se encuentra el usuario
+      const currentUrl = window.location.pathname;
+      console.log('CURRENT URL', currentUrl);
+      if (currentUrl === '/home') {
+        //* Si está en el dashboard, sale de la app
+        await this.exitApp();
+      } else {
+        //* Caso contrario a los anteriores, regresa atrás en el histórico
+        this.location.back();
+      }
+    });
+  }
+
+  async exitApp() {
+    await this.alert.presentAlert(
+      'Saliendo',
+      '¿Desea salir de la aplicación?',
+      '',
+      () => {
+        App.exitApp();
+      }
+    );
+  }
+  //! BACK BUTTON --------------------------------------------------------------------------------------->
 }
