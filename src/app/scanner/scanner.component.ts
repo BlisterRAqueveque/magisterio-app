@@ -53,11 +53,14 @@ import { ModalParcelasComponent } from '../components/modal-parcelas/modal-parce
 import { PopupService } from '../components/popup/popup.service';
 import { IngresosService } from '../service/ingresos.service';
 import { LoaderService } from '../components/loader/loader.service';
+import { PinchZoomComponent, PinchZoomModule } from '@meddv/ngx-pinch-zoom';
+import { InputComponent } from '../components/input/input.component';
+import { ParcelasService } from '../service/parcelas.service';
 
 export interface Data {
   id: number;
-  nombre: string;
-  casa_mutual: string;
+  nombre?: string;
+  casa_mutual?: string;
 }
 
 @Component({
@@ -90,6 +93,8 @@ export interface Data {
     FormsModule,
     IonModal,
     ModalParcelasComponent,
+    PinchZoomModule,
+    InputComponent,
   ],
   selector: 'app-scanner',
   templateUrl: './scanner.component.html',
@@ -100,7 +105,10 @@ export class ScannerComponent {
   //REPOSITORY:
   //* https://github.com/capawesome-team/capacitor-mlkit/tree/main/packages/barcode-scanning
 
+  // Muestra el dialogo
   visible = false;
+  // Muestra el panel para introducir manualmente
+  show = false;
 
   public readonly barcodeFormat = BarcodeFormat;
   public readonly lensFacing = LensFacing;
@@ -121,6 +129,9 @@ export class ScannerComponent {
     addIcons({ close, image, flashlight });
   }
 
+  /**
+   * Chequeamos que los permisos estén permitidos para un dispositivo móvil
+   */
   public ngOnInit(): void {
     BarcodeScanner.isSupported().then((result) => {
       this.isSupported = result.supported;
@@ -131,6 +142,9 @@ export class ScannerComponent {
     });
   }
 
+  /**
+   * Leemos el barcode desde una imagen
+   */
   public async readBarcodeFromImage(): Promise<void> {
     const { files } = await FilePicker.pickImages({ limit: 1 });
     const path = files[0]?.path;
@@ -142,62 +156,113 @@ export class ScannerComponent {
       path,
       formats,
     });
+    //* Mandamos el barcode a esta fx()
     this.closeModal(barcodes[0]);
   }
 
+  /**
+   * Abre la configuración del dispositivo
+   */
   public async openSettings(): Promise<void> {
     await BarcodeScanner.openSettings();
   }
-
+  /**
+   * Solicita los permisos necesarios
+   */
   public async requestPermissions(): Promise<void> {
     await BarcodeScanner.requestPermissions();
   }
 
+  //* Instancia del modal
   @ViewChild(IonModal) modal!: IonModal;
 
+  /**
+   * Al destruirse el modal, se detiene el core del escáner
+   */
   onWillDismiss() {
     this.stopScan();
   }
 
+  /**
+   * Presenta el modal del escáner
+   */
   presentModal() {
     BarcodeScanner.isTorchAvailable().then((result) => {
+      //* Permiso para la linterna
       this.isTorchAvailable = result.available;
 
       this.modal.present();
 
+      //* Esperamos a que se presente el modal para mostrar el escáner
       setTimeout(() => {
         this.startScan();
       }, 250);
     });
   }
 
+  //* Habilita el popup (modo servicio como inserción en el body principal)
   private readonly popup = inject(PopupService);
+  //* Servicios de parcela
+  private readonly parcelaService = inject(ParcelasService);
+
   //* Estado de la parcela, 0 desocupada, 1 ocupada
+  //* Muestra los campos para marcar ingreso, salida
   status = 0;
-  public async closeModal(barcode?: Barcode): Promise<void> {
+
+  /**
+   * @description Cierra el modal de escaneo de qr, realiza las consultas para ver la disponibilidad de la parcela
+   * o, en su defecto, para obtener la parcela (introducción manual) y devolver el estado
+   * @param barcode Código qr, el resultado del escaneo
+   * @param id Id introducido manualmente
+   */
+  public async closeModal(barcode?: Barcode, id?: number): Promise<void> {
     this.modal.dismiss();
 
     this.loader.present();
+
     if (barcode) {
       try {
+        //* Obtenemos los valores del barcode
         this.parcela = JSON.parse(barcode.rawValue);
+        //! Si no existe
         if (!this.parcela?.id) {
           this.parcela = null;
           this.popup.present('El QR escaneado no es válido.', 'warning', 1500);
         }
+        //* Chequeamos el status
         this.status = await this.checkStatus(this.parcela!.id);
-
-        console.log('PARCELA', this.status);
       } catch (err) {
-        console.log('PARCELA', JSON.stringify(err));
+        //! Caso de errores
         this.parcela = null;
         this.popup.present('El QR escaneado no es válido.', 'warning', 1500);
+      }
+    } else if (id) {
+      try {
+        //* Consultamos por la parcela
+        const parcela = await firstValueFrom(this.parcelaService.getOne(id));
+        //* Armamos el objeto
+        this.parcela = {
+          id,
+          nombre: parcela.nombre,
+          casa_mutual: parcela.casa_mutual
+            ? parcela.casa_mutual.nombre
+            : 'Sin definir',
+        };
+        //* Chequeamos el status
+        this.status = await this.checkStatus(id);
+      } catch (err) {
+        //* Caso de error o que no exista la parcela
+        this.popup.present('La parcela ingresada no existe.', 'warning', 1500);
+        this.parcela = null;
       }
     }
     this.loader.dismiss();
   }
 
   //* Torch ---------------------------------------------------------------->
+  /**
+   * Prende o apaga la linterna
+   */
   public isTorchAvailable = false;
   public async toggleTorch(): Promise<void> {
     await BarcodeScanner.toggleTorch();
@@ -207,7 +272,10 @@ export class ScannerComponent {
   //* Camera Zoom ---------------------------------------------------------->
   public minZoomRatio: number | undefined;
   public maxZoomRatio: number | undefined;
-
+  /**
+   * Realiza zoom de la cámara
+   * TODO Ver la razón por la que no se renderiza al abrir el modal
+   */
   public setZoomRatio(event: any): void {
     if (!event.detail.value) {
       return;
@@ -224,6 +292,10 @@ export class ScannerComponent {
   public lensFacing2: LensFacing = LensFacing.Back;
   public formats: BarcodeFormat[] = [BarcodeFormat.QrCode];
 
+  /**
+   * Inicializamos el servicio de escaneo, creamos el "cuadrado" central de donde se va a tomar el qr.
+   * Devuelve el resultado del escaneo
+   */
   private async startScan(): Promise<void> {
     // Hide everything behind the modal (see `src/theme/variables.scss`)
     document.querySelector('body')?.classList.add('barcode-scanning-active');
@@ -292,7 +364,9 @@ export class ScannerComponent {
       this.maxZoomRatio = result.zoomRatio;
     });
   }
-
+  /**
+   * Detiene el escáner
+   */
   private async stopScan(): Promise<void> {
     // Show everything behind the modal again
     document.querySelector('body')?.classList.remove('barcode-scanning-active');
@@ -306,6 +380,9 @@ export class ScannerComponent {
     return this.parcela;
   }
 
+  /**
+   * Chequea el status de la parcela, si tiene ingreso o no
+   */
   private readonly loader = inject(LoaderService);
   async checkStatus(id: number) {
     return await firstValueFrom(this.service.checkStatus(id));
