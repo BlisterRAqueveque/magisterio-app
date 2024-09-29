@@ -106,4 +106,4 @@ Si tienes alguna duda o sugerencia sobre la aplicación, no dudes en contactarno
 
 Gracias por utilizar nuestra aplicación. Desarrollado con ❤️ por **HVDevs Team**.
 
-![HVDevs Logo](assets/logo-hvdevs.svg)
+![HVDevs Logo](./src/assets/logo-hvdevs.svg)
