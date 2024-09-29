@@ -104,5 +104,6 @@ Si tienes alguna duda o sugerencia sobre la aplicación, no dudes en contactarno
 
 ## 🤝 HVDevs Team
 
-Gracias por utilizar nuestra aplicación. 
-<h4>Desarrollado con ❤️ por: <b>HVDevs Team</b> <img src="./src/assets/logo-hvdevs.svg" alt="HVDevs Logo" width="30">.</h4>
+Gracias por utilizar nuestra aplicación.
+
+<h1>Desarrollado con ❤️ por: <b>HVDevs Team</b> <img src="./src/assets/logo-hvdevs.svg" alt="HVDevs Logo" width="30">.</h1>
