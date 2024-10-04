@@ -30,6 +30,7 @@ import {
   IonCardTitle,
   IonCol,
   IonContent,
+  IonFooter,
   IonFab,
   IonFabButton,
   IonHeader,
@@ -57,6 +58,8 @@ import { ModalParcelasComponent } from '../components/modal-parcelas/modal-parce
 import { PopupService } from '../components/popup/popup.service';
 import { IngresosService } from '../service/ingresos.service';
 import { ParcelasService } from '../service/parcelas.service';
+import { HorariosService } from '../service/horarios.service';
+import { HttpParams } from '@angular/common/http';
 
 export interface Data {
   id: number;
@@ -68,6 +71,7 @@ export interface Data {
   standalone: true,
   imports: [
     IonRange,
+    IonFooter,
     IonFabButton,
     IonIcon,
     IonContent,
@@ -388,5 +392,33 @@ export class ScannerComponent {
   private readonly loader = inject(LoaderService);
   async checkStatus(id: number) {
     return await firstValueFrom(this.service.checkStatus(id));
+  }
+
+  isAvailable = true;
+  private readonly horariosService = inject(HorariosService);
+  @ViewChild('modalNotAvailable') modalNotAvailable!: IonModal;
+  /**
+   * @description
+   * Revisamos en los horarios del complejo, si tiene horarios definidos, y estamos en ese periodo
+   */
+  checkDisponibilidad() {
+    let params = new HttpParams();
+    params = params.set('co', 35);
+    this.horariosService.getAll(params).subscribe((data) => {
+      if (data.result[0]) {
+        console.log('Has result');
+        const inicioPeriodo = new Date(data.result[0].inicio_periodo);
+        const finPeriodo = new Date(data.result[0].fin_periodo);
+        const hoy = new Date();
+        this.isAvailable =
+          inicioPeriodo.getTime() <= hoy.getTime() &&
+          finPeriodo.getTime() >= hoy.getTime();
+        this.modalNotAvailable.present();
+      }
+    });
+  }
+
+  ngAfterViewInit() {
+    this.checkDisponibilidad();
   }
 }

@@ -6,7 +6,8 @@
     <ion-title class="text-base">Escanee el QR para dar de alta su visita</ion-title>
   </ion-toolbar>
 </ion-header>
-<ion-content>
+
+<ion-content class="relative">
 
   <div class="ion-padding">
     <ion-card>
@@ -56,16 +57,19 @@
       </ion-card-header>
       <ion-card-content>
 
-        <button class="rounded-md mb-2 text-white p-3 w-full text-lg" [ngClass]="{ 'shadow-md bg-mag-300 transition-all
-          duration-300 hover:bg-mag-600': isSupported, 'bg-mag-200': !isSupported }" (click)="presentModal()"
-          [disabled]="!isSupported">Escanear</button>
+        <button class="rounded-md mb-2 text-white p-3 w-full text-lg" [disabled]="!isSupported || !isAvailable"
+          [ngClass]="{ 'shadow-md bg-mag-300 transition-all duration-300 hover:bg-mag-600': isSupported && isAvailable,
+            'bg-mag-200': !isSupported || !isAvailable }" (click)="presentModal()">Escanear</button>
 
-        <button class="rounded-md mb-2 text-white p-3 w-full text-lg" [ngClass]="{ 'shadow-md bg-mag-300 transition-all
-          duration-300 hover:bg-mag-600': isSupported, 'bg-mag-200': !isSupported }" (click)="readBarcodeFromImage()"
-          [disabled]="!isSupported">Leer QR desde una imagen</button>
+        <button class="rounded-md mb-2 text-white p-3 w-full text-lg" [disabled]="!isSupported || !isAvailable"
+          [ngClass]="{ 'shadow-md bg-mag-300 transition-all duration-300 hover:bg-mag-600': isSupported && isAvailable,
+          'bg-mag-200': !isSupported || !isAvailable }" (click)="readBarcodeFromImage()">
+          Leer QR desde una imagen</button>
 
-        <button class="shadow-md rounded-md mb-2 bg-mag-300 transition-all duration-300 hover:bg-mag-600
-          text-white p-3 w-full text-lg" (click)="show = !show">Introducir manualmente</button>
+        <button class="rounded-md mb-2 bg-mag-300 transition-all duration-300 text-white p-3 w-full text-lg"
+          [disabled]="!isAvailable" [ngClass]="{ 'shadow-md bg-mag-300 transition-all duration-300 hover:bg-mag-600': isAvailable,
+          'bg-mag-200': !isAvailable }" (click)="show = !show">
+          Introducir manualmente</button>
 
         <div class="hide" [ngClass]="{ show: show }">
           <div class="w-full pr-6">
@@ -73,19 +77,22 @@
               <m-input placeholder="Ingrese n° parcela" #input />
 
               <div class="text-end my-4">
-                <button class="shadow-md rounded-md mb-2 bg-mag-300 transition-all duration-300 hover:bg-mag-600
-                text-white p-3 text-lg" (click)="closeModal(undefined, input.value())">Cargar</button>
+                <button class="rounded-md mb-2 bg-mag-300 transition-all duration-300 text-white p-3 w-full text-lg"
+                  [ngClass]="{ 'shadow-md bg-mag-300 transition-all duration-300 hover:bg-mag-600': isAvailable, 'bg-mag-200': !isAvailable }"
+                  (click)="closeModal(undefined, input.value())" [disabled]="!isAvailable">Cargar</button>
               </div>
             </div>
           </div>
         </div>
 
-        <button class="rounded-md mb-2 text-white p-3 w-full text-lg" [ngClass]="{ 'shadow-md bg-mag-300 transition-all
-          duration-300 hover:bg-mag-600': isSupported, 'bg-mag-200': !isSupported }" (click)="openSettings()"
-          [disabled]="!isSupported">Abrir configuración</button>
+        <button class="rounded-md mb-2 text-white p-3 w-full text-lg" [disabled]="!isSupported || !isAvailable"
+          [ngClass]="{ 'shadow-md bg-mag-300 transition-all duration-300 hover:bg-mag-600': isSupported && isAvailable,
+          'bg-mag-200': !isSupported || !isAvailable }" (click)="openSettings()">Abrir configuración</button>
 
-        <button class="shadow-md rounded-md mb-2 bg-mag-300 transition-all duration-300 hover:bg-mag-600
-            text-white p-3 w-full text-lg" (click)="requestPermissions()">Solicitar permisos de cámara</button>
+        <button class="rounded-md mb-2 bg-mag-300 transition-all duration-300 text-white p-3 w-full text-lg"
+          [disabled]="!isSupported || !isAvailable" [ngClass]="{ 'shadow-md bg-mag-300 transition-all duration-300 hover:bg-mag-600': isSupported && isAvailable,
+          'bg-mag-200': !isSupported || !isAvailable }" (click)="requestPermissions()">
+          Solicitar permisos de cámara</button>
 
       </ion-card-content>
     </ion-card>
@@ -95,14 +102,15 @@
         <ion-card-title>Ubicaciones</ion-card-title>
       </ion-card-header>
       <ion-card-content>
-        <pinch-zoom>
-          <img src="/assets/img/map.jpg" />
+        <pinch-zoom [autoHeight]="true">
+          <img src="/assets/img/map.png" />
         </pinch-zoom>
       </ion-card-content>
     </ion-card>
   </div>
 
   <m-footer />
+
 
 </ion-content>
 
@@ -142,6 +150,36 @@
       </ion-fab>
     </ion-content>
 
+  </ng-template>
+</ion-modal>
+
+
+<ion-modal #modalNotAvailable (willDismiss)="onWillDismiss()">
+  <ng-template>
+
+    <ion-header>
+      <ion-toolbar>
+        <ion-title>Periodo no disponible</ion-title>
+        <ion-buttons slot="end">
+          <ion-button (click)="modalNotAvailable.dismiss()">
+            <ion-icon name="close"></ion-icon>
+          </ion-button>
+        </ion-buttons>
+      </ion-toolbar>
+    </ion-header>
+
+    <ion-content class="ion-padding">
+      <div class="w-full h-full flex justify-center items-center">
+        <p>Lo sentimos, pero no se encuentra disponible para marcar ingreso en las parcelas del complejo. Ante cualquier
+          duda, comuníquese con administración.</p>
+      </div>
+
+    </ion-content>
+    <ion-footer class="ion-padding flex justify-end">
+      <button
+        class="rounded-md mb-2 text-white p-3 w-full text-lg shadow-md bg-mag-300 transition-all duration-300 hover:bg-mag-600"
+        (click)="modalNotAvailable.dismiss()">Cerrar</button>
+    </ion-footer>
   </ng-template>
 </ion-modal>
 
