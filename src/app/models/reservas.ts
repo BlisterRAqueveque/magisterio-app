@@ -7,6 +7,7 @@ export interface ReservaI {
   n_socio: string;
   tel: string;
   correo: string;
+  tipoPago: number;
 
   desde: Date;
   hasta: Date;
