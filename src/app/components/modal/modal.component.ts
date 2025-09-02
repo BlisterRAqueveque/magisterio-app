@@ -16,6 +16,8 @@ import { formatDate } from 'src/app/tools/format-date';
 import { ReservasService } from 'src/app/service/reservas.service';
 import { ReservaI } from 'src/app/models/reservas';
 import { HabitacionI } from 'src/app/models/habitaciones';
+import { HttpParams } from '@angular/common/http';
+import { CasaMutualI } from 'src/app/models/casa-mutual';
 
 @Component({
   standalone: true,
@@ -34,6 +36,19 @@ import { HabitacionI } from 'src/app/models/habitaciones';
   providers: [DialogService],
 })
 export class ModalComponent {
+  @Input() casaMutual!: CasaMutualI | null;
+  puedeReservar: boolean | undefined;
+  checkData() {
+    if (this.n_socio) {
+      const params = new HttpParams()
+        .set('idCasaMutual', this.casaMutual?.id ?? '')
+        .set('n_socio', this.n_socio);
+
+      this.service.getBySocioNumber(params).subscribe((data) => {
+        this.puedeReservar = data;
+      });
+    }
+  }
   show = false;
 
   visible = model<boolean>(false);
@@ -85,6 +100,7 @@ export class ModalComponent {
             desde: this.desde,
             hasta: this.hasta,
             habitacion: this.habitacion,
+            tipoPago: 1, //TODO
           };
           this.service.insert(data).subscribe({
             next: (data) => {

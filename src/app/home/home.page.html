@@ -1,12 +1,26 @@
-<ion-content [fullscreen]="true" [scrollEvents]="true" (ionScroll)="onScroll($event)" class="min-h-[100vh]">
+<ion-content
+  [fullscreen]="true"
+  [scrollEvents]="true"
+  (ionScroll)="onScroll($event)"
+  class="min-h-[100vh]"
+>
   <m-navbar [scroll]="isScroll" [height]="height">
     <ng-template #customContent>
       <!-- Select distrito -->
-      <m-select placeholder="Seleccione una casa mutual" [options]="casas_mutuales" optionLabel="id" #casas
-        optionValue="nombre" [(selectedValue)]="casa_mutual" (selectedValueChange)="setHabitaciones($event)"
-        (onDelete)="resetValues()" />
+      <m-select
+        placeholder="Seleccione una casa mutual"
+        [options]="casas_mutuales"
+        optionLabel="id"
+        #casas
+        optionValue="nombre"
+        [(selectedValue)]="casa_mutual"
+        (selectedValueChange)="setHabitaciones($event)"
+        (onDelete)="resetValues()"
+      />
       <p class="text-center mt-2">Ó</p>
-      <a href="/scanner" class="text-center w-full block text-lg text-mag-800"><b>Escanee para dar asistencia</b></a>
+      <a href="/scanner" class="text-center w-full block text-lg text-mag-800">
+        <b>Escanee para dar asistencia</b>
+      </a>
     </ng-template>
   </m-navbar>
 
@@ -15,8 +29,15 @@
     <div class="w-full hide" [ngClass]="{ 'show': casa_mutual }">
       <div class="flex justify-center items-center w-full">
         <div class="p-4 max-w-[600px] w-full flex-1">
-          <m-select placeholder="Seleccione una habitación" [options]="habitaciones" optionLabel="id" #hab
-            optionValue="nombre" [(selectedValue)]="habitacion" (selectedValueChange)="setServicios($event)" />
+          <m-select
+            placeholder="Seleccione una habitación"
+            [options]="habitaciones"
+            optionLabel="id"
+            #hab
+            optionValue="nombre"
+            [(selectedValue)]="habitacion"
+            (selectedValueChange)="setServicios($event)"
+          />
         </div>
       </div>
     </div>
@@ -25,7 +46,7 @@
     @if(servicios.length > 0) {
     <h5 class="text-xl font-bold text-center">Servicios</h5>
     <div class="flex justify-center">
-      <hr class="max-w-96 w-full">
+      <hr class="max-w-96 w-full" />
     </div>
     <div class="flex justify-center items-center w-auto">
       @for (servicio of servicios; track $index) {
@@ -49,8 +70,12 @@
     <div class="w-full hide" [ngClass]="{ 'show': desde && hasta }">
       <div>
         <div class="w-full text-center py-6">
-          <button class="shadow-md rounded-md bg-mag-300 transition-all duration-300 hover:bg-mag-600
-          text-white p-3" (click)="visible = true">Reservar</button>
+          <button
+            class="shadow-md rounded-md bg-mag-300 transition-all duration-300 hover:bg-mag-600 text-white p-3"
+            (click)="visible = true"
+          >
+            Reservar
+          </button>
         </div>
       </div>
     </div>
@@ -70,5 +95,12 @@
   <!-- Footer -->
   <m-footer />
 
-  <m-modal [(visible)]="visible" [desde]="desde!" [hasta]="hasta!" [habitacion]="habitacion!" (ended)="clear()" />
+  <m-modal
+    [(visible)]="visible"
+    [desde]="desde!"
+    [hasta]="hasta!"
+    [habitacion]="habitacion!"
+    [casaMutual]="casa_mutual"
+    (ended)="clear()"
+  />
 </ion-content>

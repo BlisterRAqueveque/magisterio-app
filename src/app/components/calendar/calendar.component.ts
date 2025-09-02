@@ -5,19 +5,24 @@ import {
   heroChevronLeftSolid,
   heroChevronRightSolid,
 } from '@ng-icons/heroicons/solid';
-import { PressDirective } from 'src/app/directives/press/press.directive';
 import { ReservaI } from 'src/app/models/reservas';
 import { ReservasService } from 'src/app/service/reservas.service';
 
 @Component({
   standalone: true,
   selector: 'm-calendar',
-  imports: [CommonModule, NgIcon, PressDirective],
+  imports: [CommonModule, NgIcon],
   providers: [provideIcons({ heroChevronLeftSolid, heroChevronRightSolid })],
   templateUrl: './calendar.component.html',
   styleUrls: ['./calendar.component.scss'],
 })
 export class CalendarComponent {
+  canSelect(dia: Date): boolean {
+    const diaSemana = dia.getDay();
+    return (
+      diaSemana === 4 || diaSemana === 5 || diaSemana === 6 || diaSemana === 0
+    );
+  }
   @Input() show = false;
 
   semana: { id: number; nombre: string; nombreShort: string }[] = [
@@ -188,25 +193,18 @@ export class CalendarComponent {
   desde!: Date | null;
   hasta!: Date | null;
   setDays(date: Date) {
-    if (!this.desde && !this.hasta) {
-      this.desde = new Date(date);
-    } else if (
-      this.desde &&
-      date < this.desde &&
-      this.rangoDisponible(date, this.desde) //! En el rango disponible
+    if (
+      this.desde?.getDate() == date.getDate() &&
+      this.desde?.getMonth() == date.getMonth() &&
+      this.desde?.getFullYear() == date.getFullYear()
     ) {
-      this.hasta = new Date(this.desde);
-      this.desde = new Date(date);
-    } else if (
-      this.desde &&
-      date > this.desde &&
-      this.rangoDisponible(this.desde, date) //! En el rango disponible
-    ) {
-      this.hasta = new Date(date);
-    } else if (this.desde && date.getTime() == this.desde.getTime()) {
       this.desde = null;
       this.hasta = null;
+      return;
     }
+    this.desde = new Date(date);
+    this.hasta = new Date(this.desde);
+    this.hasta.setDate(this.desde.getDate() + 6);
     this.dates.emit({ desde: this.desde, hasta: this.hasta });
   }
 

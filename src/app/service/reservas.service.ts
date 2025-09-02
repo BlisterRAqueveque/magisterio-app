@@ -1,14 +1,15 @@
-import { HttpClient } from '@angular/common/http';
+import { HttpClient, HttpParams } from '@angular/common/http';
 import { inject, Injectable } from '@angular/core';
 import { catchError, map } from 'rxjs';
 import { environment } from 'src/environments/environment';
 import { ReservaI } from '../models/reservas';
 import { handleError } from '../tools/handle-error';
 
-interface ResponseI {
+interface ResponseI<T = any> {
   ok: boolean;
-  result: ReservaI[];
+  result: T;
   msg: string;
+  puedeReservar: T;
 }
 
 @Injectable({ providedIn: 'root' })
@@ -28,9 +29,17 @@ export class ReservasService {
   }
 
   insert(data: Partial<ReservaI>) {
-    return this.http.post<ResponseI>(this.url, data).pipe(
+    return this.http.post<ResponseI<ReservaI[]>>(this.url, data).pipe(
       catchError((e) => handleError(e)),
       map((data) => data.result)
+    );
+  }
+
+  getBySocioNumber(params: HttpParams) {
+    const dir = this.url + 'reserva/nSocio';
+    return this.http.get<ResponseI<boolean>>(dir, { params }).pipe(
+      catchError((e) => handleError(e)),
+      map((data) => data.puedeReservar)
     );
   }
 }

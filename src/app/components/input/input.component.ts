@@ -1,16 +1,20 @@
 import { CommonModule } from '@angular/common';
-import { Component, Input, model } from '@angular/core';
+import { Component, EventEmitter, Input, model, Output } from '@angular/core';
 import { FormsModule } from '@angular/forms';
-import { IonIcon } from '@ionic/angular/standalone';
 
 @Component({
   standalone: true,
   selector: 'm-input',
   templateUrl: './input.component.html',
   styleUrls: ['./input.component.scss'],
-  imports: [IonIcon, CommonModule, FormsModule],
+  imports: [CommonModule, FormsModule],
 })
 export class InputComponent {
+  @Output() onBlur = new EventEmitter<boolean>();
+  blur() {
+    this.onBlur.emit(true);
+  }
+
   @Input() type!: string;
   @Input() placeholder!: string;
   @Input() label!: string;

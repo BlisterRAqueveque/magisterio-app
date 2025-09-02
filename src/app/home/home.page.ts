@@ -1,15 +1,6 @@
 import { CommonModule } from '@angular/common';
-import {
-  Component,
-  inject,
-  ViewChild
-} from '@angular/core';
-import {
-  IonContent,
-  IonHeader,
-  IonTitle,
-  IonToolbar,
-} from '@ionic/angular/standalone';
+import { Component, inject, ViewChild } from '@angular/core';
+import { IonContent } from '@ionic/angular/standalone';
 import { NgIcon, provideIcons } from '@ng-icons/core';
 import { heroHomeModernMini } from '@ng-icons/heroicons/mini';
 import {
@@ -17,7 +8,6 @@ import {
   heroChevronRightSolid,
 } from '@ng-icons/heroicons/solid';
 import { CalendarComponent } from '../components/calendar/calendar.component';
-import { CardComponent } from '../components/card/card.component';
 import { FooterComponent } from '../components/footer/footer.component';
 import { ModalComponent } from '../components/modal/modal.component';
 import { NavbarComponent } from '../components/navbar/navbar.component';
@@ -25,7 +15,6 @@ import { SelectComponent } from '../components/select/select.component';
 import { CasaMutualI } from '../models/casa-mutual';
 import { HabitacionI } from '../models/habitaciones';
 import { CasasMutualesService } from '../service/casas-mutuales.service';
-import { ReservasService } from '../service/reservas.service';
 
 @Component({
   selector: 'app-home',
@@ -33,13 +22,9 @@ import { ReservasService } from '../service/reservas.service';
   styleUrls: ['home.page.scss'],
   standalone: true,
   imports: [
-    IonHeader,
-    IonToolbar,
-    IonTitle,
     IonContent,
     CommonModule,
     NavbarComponent,
-    CardComponent,
     FooterComponent,
     NgIcon,
     CalendarComponent,
@@ -100,8 +85,6 @@ export class HomePage {
       this.habitaciones = casa_mutual.habitaciones;
     }
   }
-
-  private readonly reservaService = inject(ReservasService);
 
   setServicios(habitacion?: HabitacionI) {
     if (habitacion) {
