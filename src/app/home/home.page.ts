@@ -15,6 +15,7 @@ import { SelectComponent } from '../components/select/select.component';
 import { CasaMutualI } from '../models/casa-mutual';
 import { HabitacionI } from '../models/habitaciones';
 import { CasasMutualesService } from '../service/casas-mutuales.service';
+import { FormsModule } from '@angular/forms';
 
 @Component({
   selector: 'app-home',
@@ -24,6 +25,7 @@ import { CasasMutualesService } from '../service/casas-mutuales.service';
   imports: [
     IonContent,
     CommonModule,
+    FormsModule,
     NavbarComponent,
     FooterComponent,
     NgIcon,
@@ -122,4 +124,6 @@ export class HomePage {
     this.calendar.hasta = null;
     this.resetValues();
   }
+
+  acepto: boolean = false;
 }

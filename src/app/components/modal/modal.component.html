@@ -39,6 +39,18 @@
                 [(value)]="n_socio"
                 (onBlur)="checkData()"
               />
+              <div
+                class="hide"
+                [ngClass]="{
+                  show: puedeReservar === false
+                }"
+              >
+                <div>
+                  <p class="text-red-600 text-start">
+                    Ya tiene una reserva aprobada para este periodo
+                  </p>
+                </div>
+              </div>
             </div>
             <div class="lg:col-span-6 md:col-span-6 sm:col-span-12 col-span-12">
               <m-input
@@ -62,8 +74,12 @@
 
           <div class="w-full text-end">
             <button
-              class="shadow-md rounded-md bg-mag-300 transition-all duration-300 hover:bg-mag-600 text-white p-3 mr-3"
-              [ngClass]="{ 'cursor-not-allowed': !puedeReservar }"
+              class="rounded-md bg-mag-300 transition-all duration-300 text-white p-3 mr-3"
+              [ngClass]="{
+                'cursor-pointer opacity-60': !puedeReservar,
+                'shadow-md hover:bg-mag-600':
+                  puedeReservar == undefined || puedeReservar
+              }"
               (click)="upload()"
               [disabled]="puedeReservar !== undefined ? !puedeReservar : false"
             >

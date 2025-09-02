@@ -6,6 +6,14 @@
 >
   <m-navbar [scroll]="isScroll" [height]="height">
     <ng-template #customContent>
+      <p class="text-xl"><b>Reglamento:</b></p>
+      <p class="pl-2">
+        Lorem ipsum dolor, sit amet consectetur adipisicing elit. Vero deserunt,
+        modi autem perferendis recusandae alias soluta nostrum doloribus fuga
+        rerum possimus pariatur quos fugit quibusdam animi voluptatum molestias
+        neque dolor.
+      </p>
+
       <!-- Select distrito -->
       <m-select
         placeholder="Seleccione una casa mutual"
@@ -68,6 +76,20 @@
     </div>
 
     <div class="w-full hide" [ngClass]="{ 'show': desde && hasta }">
+      <div class="flex justify-center items-center mt-2">
+        <input
+          id="acepto"
+          type="checkbox"
+          class="w-5 h-5 mr-2"
+          [(ngModel)]="acepto"
+        />
+        <label for="acepto">
+          ¿Acepta las condiciones y reglamentos para la reserva?
+        </label>
+      </div>
+    </div>
+
+    <div class="w-full hide" [ngClass]="{ 'show': acepto }">
       <div>
         <div class="w-full text-center py-6">
           <button
@@ -76,17 +98,6 @@
           >
             Reservar
           </button>
-        </div>
-      </div>
-    </div>
-
-    <!-- Reglas de convivencia -->
-    <div class="w-full">
-      <div class="flex justify-center items-center w-full">
-        <div class="p-4 max-w-[600px] w-full flex-1">
-          <!-- <p><b class="text-red-900">Recuerde: </b> Lorem, ipsum dolor sit amet consectetur adipisicing elit. Nobis
-            porro earum ex aspernatur quaerat nihil tempora commodi eaque cumque sit quis alias, omnis rem voluptatum
-            fuga. Sapiente possimus consequuntur debitis.</p> -->
         </div>
       </div>
     </div>

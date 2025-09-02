@@ -47,6 +47,8 @@ export class ModalComponent {
       this.service.getBySocioNumber(params).subscribe((data) => {
         this.puedeReservar = data;
       });
+    } else {
+      this.puedeReservar = undefined;
     }
   }
   show = false;

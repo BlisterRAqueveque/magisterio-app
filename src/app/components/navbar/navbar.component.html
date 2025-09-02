@@ -1,27 +1,51 @@
 <!-- py-0 -->
-<header #div class="header bg-mag-900 py-8 transition-all duration-500"
-  [ngClass]="{ 'lg:py-0 lg:sticky lg:top-0': scroll }">
-
-  <div class="w-full p-2 center top-container text-white text-sm ">
-    <img src="assets/img/logo.svg" alt="Mutual magisterio" width="50" height="50">
+<header
+  #div
+  class="header bg-mag-900 py-8 transition-all duration-500"
+  [ngClass]="{ 'lg:py-0 lg:sticky lg:top-0': scroll }"
+>
+  <div class="w-full p-2 center top-container text-white text-sm">
+    <img
+      src="assets/img/logo.svg"
+      alt="Mutual magisterio"
+      width="50"
+      height="50"
+    />
     <div>
-      <a href="#" class="mr-3"><b>Sobre nosotros</b></a>
-      <a href="#"><ng-icon name="heroPhoneSolid" class="-mb-1" /><b
-          [ngClass]="{ 'lg:hidden': scroll }">Contáctenos</b></a>
+      <a
+        href="https://mutualmagisterio.org.ar/home#somos"
+        target="_blank"
+        class="mr-3"
+      >
+        <b>Sobre nosotros</b>
+      </a>
+      <a href="https://mutualmagisterio.org.ar/contacto" target="_blank">
+        <ng-icon name="heroPhoneSolid" class="-mb-1" />
+        <b [ngClass]="{ 'lg:hidden': scroll }">Contáctenos</b>
+      </a>
     </div>
   </div>
 
   <!-- hidden -->
   <div [ngClass]="{ 'lg:h-0': scroll }">
-    <h1 [ngClass]="{ 'lg:h-0': scroll }" class="font-bold text-xl text-white text-center mb-3">Encuentra el alojamiento
-      perfecto para tus vacaciones</h1>
-    <h5 [ngClass]="{ 'lg:h-0': scroll }" class="text-white text-center mb-3">Explora destinos, encuentros a la
-      perfección</h5>
+    <h1
+      [ngClass]="{ 'lg:h-0': scroll }"
+      class="font-bold text-xl text-white text-center mb-3"
+    >
+      Encuentra el alojamiento perfecto para tus vacaciones
+    </h1>
+    <h5 [ngClass]="{ 'lg:h-0': scroll }" class="text-white text-center mb-3">
+      Explora destinos, encuentros a la perfección
+    </h5>
   </div>
 
   <!-- absolute top-0 mt-3 -->
-  <div class="w-full flex justify-center items-center"
-    [ngClass]="{ 'lg:absolute lg:top-0 lg:mt-3 lg:left-1/2 lg:-translate-x-1/2': scroll }">
+  <div
+    class="w-full flex justify-center items-center"
+    [ngClass]="{
+      'lg:absolute lg:top-0 lg:mt-3 lg:left-1/2 lg:-translate-x-1/2': scroll
+    }"
+  >
     <div class="max-w-[600px] flex-1" id="search">
       <div class="bg-white p-4 rounded-md shadow-md">
         <ng-container *ngTemplateOutlet="customContent"></ng-container>
